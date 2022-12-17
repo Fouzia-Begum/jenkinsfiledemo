@@ -1,0 +1,70 @@
+pipeline {
+    agent any
+    environment {
+        name = "victor"
+    }
+    parameters {
+        string(name: 'person', defaultValue: 'fiza', description: 'who are you')
+        booleanParam (name: 'isMale', defaultValue: true , description: '')
+        choice (name: 'City', choices: ['hyderabad', 'delhi', 'mumbai'] , description: '')
+    }
+
+    stages {
+        stage('Test') {
+            steps {
+                sh '''
+                ls
+                pwd
+                cal 2022
+                date
+                '''
+            }
+        }
+        stage('Environment variable') {
+            environment {
+              username = 'fouzia'
+            }
+
+            steps {
+                echo "${username}"
+                echo "${BUILD_ID}"
+                echo "${name}"
+            }
+        }
+        stage('Parameters') {
+            steps {
+                echo "${person}"
+            }
+        }
+        stage('continue ?') {
+            input {
+                message "should we continue?"
+                ok "yes we should"
+            }
+            steps {
+                echo 'Deploy on prod'
+            }
+        }
+        stage('Deploy on prod') {
+            steps {
+                echo 'Deploy on prod'
+            }
+        }
+        
+    }
+    
+    post { 
+            always { 
+                echo 'I will always say Hello again!'
+            }
+            failure {
+                echo 'failed'
+            }
+            success {
+                echo 'success'
+            }
+        }
+
+}
+
+   
